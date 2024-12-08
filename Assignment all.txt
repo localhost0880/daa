@@ -844,3 +844,292 @@ generateBinaryStrings(N2);
 
 
 -------------------------------------------------------------------------------------------
+
+1. Generate a binary string of length N using branch and bound technique
+Code:
+
+function branchAndBoundBinaryStrings(n)
+    queue = [""]; // Initialize the queue with an empty string as an array
+
+    while size(queue, "*") > 0 do
+        current = queue(1); // Dequeue the first element
+        queue = queue(2:$); // Remove it from the queue
+
+        if length(current) == n then
+            // If the binary string reaches the required length, print it
+            disp(current);
+        else
+            // Otherwise, generate branches by appending "0" and "1"
+            queue($ + 1) = current + "0"; // Add branch with "0"
+            queue($ + 1) = current + "1"; // Add branch with "1"
+        end
+    end
+endfunction
+
+// Main program
+disp("Enter the length of binary strings (n): ");
+n = input("n = "); // Take user input for the length of binary strings
+if n > 0 then
+    disp("Binary Strings:");
+    branchAndBoundBinaryStrings(n); // Call the function with user input
+else
+    disp("Invalid input. Please enter a positive integer.");
+end
+
+----------------------------------------------------------------------------------------------
+2. Exam Scheduling Problem (Graph Coloring)
+
+function subjectGraph = createSubjectGraph(students)
+    [nStudents, nSubjects] = size(students); 
+    subjectGraph = zeros(nSubjects, nSubjects);
+
+    for i = 1:nSubjects
+        for j = i+1:nSubjects           
+            for s = 1:nStudents
+                if students(s, i) == 1 & students(s, j) == 1 then
+                    subjectGraph(i, j) = 1; 
+                    subjectGraph(j, i) = 1; 
+                    break;
+                end
+            end
+        end
+    end
+endfunction
+
+function [chromaticNumber, schedule] = greedyGraphColoring(graph)
+    n = size(graph, 1); 
+
+    result = -1 * ones(n, 1); 
+    result(1) = 1;
+    available = ones(1, n); 
+    
+    for u = 2:n
+        for i = 1:n
+            if graph(u, i) == 1 & result(i) <> -1 then
+                available(result(i)) = 0; 
+            end
+        end
+        
+        for color = 1:n
+            if available(color) == 1 then
+                result(u) = color; 
+                break;
+            end
+        end
+        
+        available = ones(1, n);
+    end
+
+    chromaticNumber = max(result);
+    
+    schedule = list();
+    for i = 1:n
+        schedule($ + 1) = "Subject " + string(i) + " is scheduled in time slot " + string(result(i));
+    end
+endfunction
+
+// Define the student-subject enrollment matrix
+students = [
+  1 0 0 1;  // Student 1 is enrolled in Subject 1 and Subject 3
+  1 1 1 1;
+  0 0 1 1;
+  1 0 0 1  // Student 2 is enrolled in Subject 3
+];
+
+subjectGraph = createSubjectGraph(students);
+
+[minTimeSlots, examSchedule] = greedyGraphColoring(subjectGraph);
+
+disp("Minimum time slots needed: " + string(minTimeSlots));
+
+disp("Exam schedule:");
+for i = 1:length(examSchedule)
+    disp(examSchedule(i));
+end
+
+--------------------------------------------------------------------------------------------
+
+3. Maze Solving Using Graph Algorithms
+
+function solveMaze(maze, start, endd)
+    n = size(maze, 1);
+    visited = zeros(n, n);
+    queue = [start];
+    path = [];
+    
+    while ~isempty(queue)
+        current = queue(1, :);
+        queue(1, :) = [];
+        visited(current(1), current(2)) = 1;
+        path = [path; current];
+        
+        if current(1) == endd(1) && current(2) == endd(2) then
+            disp("Path found:");
+            disp(path);
+            return
+        end
+        
+        neighbors = [
+            current(1)-1, current(2);
+            current(1)+1, current(2);
+            current(1), current(2)-1;
+            current(1), current(2)+1
+        ];
+        
+        for k = 1:size(neighbors, 1)
+            x = neighbors(k, 1);
+            y = neighbors(k, 2);
+            if x > 0 && x <= n && y > 0 && y <= n && maze(x, y) == 0 && visited(x, y) == 0 then
+                queue = [queue; [x, y]];
+            end
+        end
+    end
+    
+    disp("No path found.");
+endfunction
+
+// Example maze (0 = free, 1 = wall)
+maze = [
+    0 1 0 0 0;
+    0 1 1 1 0;
+    0 0 0 1 0;
+    1 1 0 0 0;
+    0 0 1 1 0
+];
+start = [1, 1];
+endd = [5, 5];
+solveMaze(maze, start, endd);
+
+
+--------------------------------------------------------------------------------------------
+write a scilab program to find minimum cost spanning tree of a given connected undirected graph using prim's algorithm
+
+
+function prims_algorithm(graph)
+    n = size(graph, 1);  // Number of vertices
+    visited = zeros(1, n);  // Array to track visited vertices
+    key = ones(1, n) * %inf;  // Initialize the minimum cost (key values)
+    parent = zeros(1, n);  // Array to store the parent nodes
+    key(1) = 0;  // Start from the first vertex (or any arbitrary vertex)
+    
+    for i = 1:n
+        // Find the vertex with the minimum key value that is not visited
+        min_key = %inf;
+        u = -1;
+        for v = 1:n
+            if visited(v) == 0 && key(v) < min_key
+                min_key = key(v);
+                u = v;
+            end
+        end
+        
+        // Mark the vertex as visited
+        visited(u) = 1;
+        
+        // Update the key and parent values for the adjacent vertices
+        for v = 1:n
+            if visited(v) == 0 && graph(u, v) ~= 0 && graph(u, v) < key(v)
+                key(v) = graph(u, v);
+                parent(v) = u;
+            end
+        end
+    end
+    
+    // Display the minimum cost spanning tree
+    disp("Minimum Cost Spanning Tree (MST):");
+    total_cost = 0;
+    for i = 2:n  // Start from 2 since vertex 1 is the root (parent of 1 is 0)
+        disp("Edge: " + string(parent(i)) + " - " + string(i) + " with cost: " + string(graph(parent(i), i)));
+        total_cost = total_cost + graph(parent(i), i);
+    end
+    disp("Total cost of MST: " + string(total_cost));
+endfunction
+
+// Example graph (Adjacency Matrix for an undirected graph)
+graph = [
+    0 7 0 8 0 0;
+    7 0 6 3 0 0;
+    0 6 0 4 2 5;
+    8 3 4 1 3 0;
+    0 0 2 3 0 2;
+    0 0 5 0 2 0
+];
+
+// Call the function
+prims_algorithm(graph);
+
+-------------------------------------------------------------------------------------------
+Given a set of cities and distance between every pair of cities, the problem is 
+to find the shortest possible tour that visits every city exactly once and returns 
+to the starting point. 
+
+
+function [min_distance, best_path] = tspBranchBound(cost_matrix)
+    n = size(cost_matrix, 1);  // Number of cities
+
+    visited = zeros(1, n); 
+    visited(1) = 1; // Start from the first city (city 0)
+
+    best_path = [];
+
+    [min_distance, best_path] = tsp_recursive(cost_matrix, visited, 1, 0, 1, n, [0]);
+endfunction
+
+function [distance, best_path] = tsp_recursive(cost_matrix, visited, current_city, current_distance, count, n, current_path)
+
+    if count == n then
+        final_distance = current_distance + cost_matrix(current_city, 1); 
+        current_path = [current_path, 0]; 
+        distance = final_distance;
+        best_path = current_path; // Store the best path found
+        return;
+    end
+    
+    min_distance = %inf; 
+    best_path = [];    
+    
+ 
+    for next_city = 2:n
+        if visited(next_city) == 0 then
+            visited(next_city) = 1; // Mark the city as visited
+
+            new_distance = current_distance + cost_matrix(current_city, next_city);
+            
+            [temp_distance, temp_path] = tsp_recursive(cost_matrix, visited, next_city, new_distance, count + 1, n, [current_path, next_city - 1]);
+            
+            
+            if temp_distance < min_distance then
+                min_distance = temp_distance;
+                best_path = temp_path; // Update best path if a new minimum distance is found
+            end
+            
+            visited(next_city) = 0; // Backtrack, mark the city as unvisited
+        end
+    end
+    
+    distance = min_distance; // Return the minimum distance for the current recursion level
+endfunction
+
+
+function path_str = join_path_with_arrow(path)
+    path_str = string(path(1));  // Start with the first city
+    for i = 2:length(path)
+        path_str = path_str + "->" + string(path(i));  // Append each city with "->"
+    end
+endfunction
+
+
+cost_matrix =[
+    0 10 15 20; 
+    10 0 35 25; 
+    15 35 0 30; 
+    20 25 30 0
+]; // Updated Distance matrix for 4 cities
+[min_distance, best_path] = tspBranchBound(cost_matrix);
+
+formatted_path = join_path_with_arrow(best_path);
+
+// Display the results
+disp("Shortest distance covering all cities is: " + string(min_distance));
+disp("Best path for the tour is: " + formatted_path);
+
