@@ -1,0 +1,846 @@
+---------------------------------------------------------------------------------------------
+//Assignment 3
+
+// 1.] Write a Scilab program to solve a Quadratic equation ax^2 + bx +c =0. The i/p of func of value "a,b,c" and o/p of func should be variable names "p,q" appropriatel declared.
+
+
+function [p,q] = solveQuadratic(a,b,c)
+    D = b^2 - 4*a*c
+    
+    if D>0  then
+        p = (-b + sqrt(D)) / (2*a)
+        q = (-b - sqrt(D)) / (2*a)
+    elseif D == 0 then
+        p = (-b )/ (2*i)
+        q = (-b )/ (2*i)
+    else
+        p = (-b + %i * sqrt(-D)) / (2*a)
+        q = (-b - %i * sqrt(-D)) / (2*a)
+    end
+endfunction
+
+a=1
+b=-3
+c=2
+[p,q] = solveQuadratic(a,b,c)
+disp(p)
+disp(q)
+
+
+// 2.] Write a Scilab program to compute sum of the first n natural numbers.
+
+
+function sum = Natural(n)
+    sum = n * (n + 1) / 2
+endfunction
+
+n = 10
+sum = Natural(n)
+disp(sum)
+
+
+// 3.] Write a Scilab program to compute factorial of a natural number n .
+
+
+function fact = factorial(n)
+    fact = 1
+    for i = 1 : n
+        fact = fact * i
+    end
+endfunction
+
+n=5
+fact = factorial(n)
+disp(fact)
+
+
+// 4.] Write a scilab program using for loop to compute the sum of two given matrices,if they are of comparable order.
+
+
+function C = matrix_sum(A, B)
+    [m, n] = size(A);
+    [p, q] = size(B);
+
+    if (m == p) & (n == q) then
+        C = zeros(m, n);
+        
+        for i = 1:m
+            for j = 1:n
+                C(i, j) = A(i, j) + B(i, j);
+            end
+        end
+    else
+        error("Matrices are not of the same size.");
+    end
+endfunction
+
+A = [1 2 3; 4 5 6; 7 8 9];
+B = [9 8 7; 6 5 4; 3 2 1];
+
+C = matrix_sum(A, B);
+disp("Matrix A:");
+disp(A);
+disp("Matrix B:");
+disp(B);
+disp("Sum of Matrix A and Matrix B:");
+disp(C);
+
+
+// 5.] Write a Scilab program using function to compute the number of permutation and number of combinations for given values of n and r.
+
+
+function P = permutations(n, r)
+    if r > n then
+        error("r must be less than or equal to n.");
+    end
+    P = factorial(n) / factorial(n - r);
+endfunction
+
+function C = combinations(n, r)
+    if r > n then
+        error("r must be less than or equal to n.");
+    end
+    C = factorial(n) / (factorial(r) * factorial(n - r));
+endfunction
+
+n = 5;
+r = 3;
+
+P = permutations(n, r);
+C = combinations(n, r);
+
+disp("Number of permutations (P(n, r)):");
+disp(P);
+disp("Number of combinations (C(n, r)):");
+disp(C);
+
+
+// 6.] write a scilab program using functions to compute the sum of digits of natural number 'n'.
+
+
+// Define the function to calculate the sum of digits
+function sum = sum_of_digits(n)
+    sum = 0;
+    
+    if n < 0 then
+        error("Input must be a natural number (positive integer).");
+    end
+    
+    while n > 0 do
+        digit = modulo(n, 10); // Use modulo() function for calculating the remainder
+        
+        sum = sum + digit;
+        
+        n = floor(n / 10); // Use floor() to ensure integer division
+    end
+endfunction
+
+// Example usage
+n = 1234;
+
+result = sum_of_digits(n);
+disp("Sum of digits of " + string(n) + ":");
+disp(result);
+
+
+
+// 7.] Write a scilab program using function to find the number of the digits of a natural number 'n'.
+
+
+
+function num_digits = count_digits(n)
+    num_digits = 0;
+    
+    if n < 0 then
+        error("Input must be a natural number (positive integer).");
+    end
+    
+    if n == 0 then
+        num_digits = 1;
+        return;
+    end
+    
+    while n > 0 do
+        num_digits = num_digits + 1;
+        n = floor(n / 10);
+    end
+endfunction
+
+n = 12345;
+
+result = count_digits(n);
+disp("Number of digits in " + string(n) + ":");
+disp(result);
+
+// 8.] Reverse the given number
+
+// Define the function to reverse a number
+function reversed_number = reverse_number(n)
+    reversed_number = 0;
+    original_number = n;
+    
+    while n > 0 do
+        last_digit = n - 10 * floor(n / 10); // Extract the last digit
+        reversed_number = reversed_number * 10 + last_digit; // Build the reversed number
+        n = floor(n / 10); // Remove the last digit from n
+    end
+    
+    // Optionally, you can display the original and reversed numbers here
+    // disp("Original number: " + string(original_number))
+    // disp("Reversed number: " + string(reversed_number))
+endfunction
+
+// Main script to get input and call the function
+n = input("Enter a number you want to reverse: ");
+reversed_number = reverse_number(n);
+
+disp("Original number: " + string(n))
+disp("Reversed number: " + string(reversed_number))
+
+
+// 9.] Check whether palindrome
+
+// Function to reverse a number
+function reversed_number = reverse_number(n)
+    reversed_number = 0;
+    
+    while n > 0 do
+        last_digit = n - 10 * floor(n / 10); // Extract the last digit
+        reversed_number = reversed_number * 10 + last_digit; // Build the reversed number
+        n = floor(n / 10); // Remove the last digit from n
+    end
+endfunction
+
+// Function to check if a number is a palindrome
+function check_palindrome(n)
+    original_number = n;
+    reversed_number = reverse_number(n); // Use the reverse_number function
+    
+    disp("Original number: " + string(original_number));
+    disp("Reversed number: " + string(reversed_number));
+    
+    if original_number == reversed_number then
+        disp("The number is a palindrome.");
+    else
+        disp("The number is not a palindrome.");
+    end
+endfunction
+
+// Main script to get input and check palindrome
+n = input("Enter a number to check palindrome: ");
+check_palindrome(n);
+
+
+// 10] Check whether armstrong
+
+ // Function to count the number of digits in a number
+function num_digits = count_digits(n)
+    num_digits = 0;
+    while n > 0 do
+        n = floor(n / 10); // Remove the last digit
+        num_digits = num_digits + 1; // Increment the digit counter
+    end
+endfunction
+
+// Function to check if a number is an Armstrong number
+function is_armstrong = check_armstrong(n)
+    original_number = n;
+    sum_of_powers = 0;
+    
+    num_digits = count_digits(n); // Use count_digits function to get number of digits
+    
+    temp = n; // Reset temp to the original number
+    
+    while temp > 0 do
+        last_digit = temp - 10 * floor(temp / 10); // Extract last digit
+        sum_of_powers = sum_of_powers + last_digit^num_digits; // Add digit^num_digits to the sum
+        temp = floor(temp / 10); // Remove the last digit
+    end
+    
+    // Check if the sum of powers equals the original number
+    is_armstrong = (original_number == sum_of_powers);
+endfunction
+
+// Main script to get input and check Armstrong number
+n = input("Enter a number to check: "); // Get the input number
+
+if check_armstrong(n) then
+    disp("The number is an Armstrong number.");
+else
+    disp("The number is not an Armstrong number.");
+end
+
+
+// 11] decimal to binary converter
+
+// Function to convert a decimal number to binary
+function binary_string = decimal_to_binary(n)
+    binary_digits = []; // Array to store binary digits
+    temp = n; // Temporary variable for manipulation
+    
+    // Convert decimal to binary
+    while temp > 0 do
+        remainder = temp - 2 * floor(temp / 2); // Calculate remainder (binary digit)
+        binary_digits = [remainder; binary_digits]; // Append remainder to binary_digits
+        temp = floor(temp / 2); // Update temp for next iteration
+    end
+    
+    // If the number is 0, the binary representation is just "0"
+    if isempty(binary_digits) then
+        binary_digits = [0];
+    end
+    
+    // Convert binary_digits array to a string manually
+    binary_string = "";
+    for i = 1:size(binary_digits, 1) do
+        binary_string = binary_string + string(binary_digits(i));
+    end
+endfunction
+
+// Main script to get input and convert to binary
+n = input("Enter a number: "); // Get the input number
+binary_string = decimal_to_binary(n); // Convert decimal to binary
+
+// Display the binary equivalent
+disp("The binary equivalent of " + string(n) + " is: " + binary_string);
+
+
+// 12] Binary to decimal converter
+
+// Function to convert binary number (vector) to decimal
+function decimal_value = binary_to_decimal(binary_number)
+    decimal_value = 0; // Initialize decimal value
+    num_bits = size(binary_number, 1); // Number of bits in the binary number
+    
+    // Convert binary to decimal
+    for i = 1:num_bits do
+        bit_value = binary_number(i); // Get the binary digit
+        power_of_two = num_bits - i; // Calculate the power of 2 (position from right, starting with 0)
+        decimal_value = decimal_value + bit_value * 2^power_of_two; // Accumulate the decimal value
+    end
+endfunction
+
+// Main script to get input and convert to decimal
+binary_number = input("Enter the binary number as a vector of digits : "); // Get the binary number
+
+decimal_value = binary_to_decimal(binary_number); // Convert binary to decimal
+
+// Display the decimal equivalent
+disp("The decimal equivalent of the binary number is: " + string(decimal_value));
+
+
+
+---------------------------------------------------------------------------------------------
+//Assignment 4
+
+1. Write a Scilab program to sort 10 numbers using bubble sort in increasing order. 
+
+
+function sorted_arr = bubble_sort(arr)
+    
+    n = length(arr);
+
+    for i = 1:n 
+             
+        for j = 1:(n-i)
+            if arr(j) > arr(j+1) then                
+                temp = arr(j);
+                arr(j) = arr(j+1);
+                arr(j+1) = temp;               
+            end
+        end                    
+    end
+    
+    sorted_arr = arr;
+    
+endfunction
+
+arr = [65, 7, 100, 20, 890, 10, 1, 78, 90, 800];
+
+sorted_arr = bubble_sort(arr);
+
+disp(sorted_arr);
+
+
+2. Write a Scilab program to sort 5 numbers using insertion sort in increasing order. 
+
+function sorted_arr = insertion_sort(arr)
+    
+    n = length(arr);
+
+    for i = 2:n
+        key = arr(i); 
+        j = i - 1;
+        
+        
+        while j >= 1 & arr(j) > key do
+            arr(j + 1) = arr(j);
+            j = j - 1;
+        end
+        
+        
+        arr(j + 1) = key;
+    end
+
+   
+    sorted_arr = arr;
+endfunction
+
+arr = [65, 7, 100, 20, 890, 10, 1, 78, 90, 800];
+
+sorted_arr = insertion_sort(arr);
+
+disp(sorted_arr);
+
+
+3. Write a Scilab program to find a number using Linear search. Accept 5 
+numbers from the user and number to find. 
+
+function index = linear_search(arr, target)
+    index = -1; 
+    
+    n = length(arr);
+    
+    for i = 1:n
+        if arr(i) == target then
+            index = i; 
+            return; 
+        end
+    end
+endfunction
+
+
+disp("Enter the elements of the array separated by spaces: ");
+arr_str = input("", "s"); 
+
+
+arr = evstr(arr_str); 
+
+if length(arr) == 0 then
+    error("Invalid input. Please enter numeric values separated by spaces.");
+end
+
+target = input("Enter the number to search: ");
+
+result_index = linear_search(arr, target);
+
+if result_index == -1 then
+    disp("The number was not found in the array.");
+else
+    disp("The number was found at index: " + string(result_index));
+end
+
+
+4. Write a Scilab program to find a number using Binary search. Accept 5 
+numbers from the user and number to find.
+
+function index = binary_search(arr, target)
+    index = -1;
+    
+    left = 1; 
+    right = length(arr); 
+    
+    while left <= right do
+        mid = floor((left + right) / 2);
+        
+        if arr(mid) == target then
+            index = mid;
+            return; 
+        elseif arr(mid) < target then
+            left = mid + 1;  
+        else
+            right = mid - 1; 
+        end
+    end
+endfunction
+
+disp("Enter the elements of the sorted array separated by spaces: ");
+arr_str = input("", "s"); 
+arr = evstr(arr_str); 
+
+if length(arr) == 0 then
+    error("Invalid input. Please enter numeric values separated by spaces.");
+end
+
+target = input("Enter the number to search: ");
+result_index = binary_search(arr, target);
+
+if result_index == -1 then
+    disp("The number was not found in the array.");
+else
+    disp("The number was found at index: " + string(result_index));
+end
+
+
+---------------------------------------------------------------------------------------------
+//Assignment 5
+
+1. Write a Scilab program to sort 5 numbers using Merge sort in increasing order. 
+
+function [sortedArray]=merge(left, right)
+    m=length(left)
+    n=length(right)
+    sortedArray=[]
+    i=1; j=1;
+    while i<=m & j<=n do
+        if left(i)<=right(j) then
+            sortedArray=[sortedArray, left(i)]
+            i=i+1;
+        else
+            sortedArray=[sortedArray, right(j)]
+            j=j+1;
+        end
+        
+    end
+    if i<=m then
+        sortedArray=[sortedArray,left(i:m)]
+    end
+    if j<=n then
+        sortedArray=[sortedArray, right(j:n)]
+    end
+    
+endfunction
+
+function [sortedArray]=mergeSort(array)
+    n=length(array)
+    if n<=1 then
+        sortedArray=array
+        return;
+    end
+    
+    mid=ceil(n/2);
+    left=array(1:mid);
+    right=array(mid+1:n);
+    
+    left=mergeSort(left);
+    right=mergeSort(right);
+    sortedArray=merge(left,right);
+    
+endfunction
+
+array=[1023,45,78,96,1,2,87]
+sortedArray=mergeSort(array)
+disp(sortedArray);
+
+
+2. Write a Scilab program to solve the following problem: 
+Nuts & Bolts Problem (Lock & Key problem) using Quick Sort. Given a set of n nuts 
+of different sizes and n bolts of different sizes. There is a one-one mapping between 
+nuts and bolts. Match nuts and bolts efficiently. 
+Constraint: Comparison of a nut to another nut or a bolt to another bolt is not 
+allowed. It means a nut can only be compared with a bolt and a bolt can only be 
+compared with a nut to see which one is bigger/smaller. Another way of asking this 
+problem is, to give a box with locks and keys where one lock can be opened by one 
+key in the box. We need to match 
+the pair.
+
+function [nuts, bolts] = matchNutsAndBolts(nuts, bolts)
+    if length(nuts) <> length(bolts) then
+        error("The number of nuts and bolts must be the same.");
+    end
+
+    [nuts, bolts] = quicksortMatch(nuts, bolts);
+endfunction
+
+function [sortedNuts, sortedBolts] = quicksortMatch(nuts, bolts)
+    n = length(nuts);
+
+    if n <= 1 then
+        sortedNuts = nuts;
+        sortedBolts = bolts;
+        return;
+    end
+
+    // Choose a pivot bolt
+    pivotBolt = bolts($); // Last element of bolts array
+    // Partition nuts using pivot bolt
+    [leftNuts, rightNuts, matchedNut] = partition(nuts, pivotBolt);
+    
+    // Partition bolts using the matched nut
+    [leftBolts, rightBolts] = partition(bolts, matchedNut);
+
+    // Recursively sort and match
+    [sortedLeftNuts, sortedLeftBolts] = quicksortMatch(leftNuts, leftBolts);
+    [sortedRightNuts, sortedRightBolts] = quicksortMatch(rightNuts, rightBolts);
+
+    // Combine results
+    sortedNuts = [sortedLeftNuts, matchedNut, sortedRightNuts];
+    sortedBolts = [sortedLeftBolts, pivotBolt, sortedRightBolts];
+    
+endfunction
+
+function [leftPartition, rightPartition, matchedElement] = partition(array, pivot)
+    leftPartition = [];
+    rightPartition = [];
+    matchedElement = [];
+    for i = 1:length(array) do
+        if array(i) < pivot then
+            leftPartition = [leftPartition, array(i)];
+        elseif array(i) > pivot then
+            rightPartition = [rightPartition, array(i)];
+        else
+            matchedElement = array(i);
+        end
+    end
+endfunction
+
+nuts = [5, 25, 80, 3, 6, 4];
+bolts = [4, 6, 25, 5, 3, 80];
+[nuts, bolts] = matchNutsAndBolts(nuts, bolts);
+disp("Matched Nuts:");
+disp(nuts);
+disp("Matched Bolts:");
+disp(bolts);
+
+
+---------------------------------------------------------------------------------------------
+//Assignment 6
+
+Let there be N workers and N jobs. Any worker can be assigned to 
+perform any job, incurring some cost that may vary depending on the 
+work-job assignment. It is required to perform all jobs by assigning 
+exactly one worker to each job and exactly one job to each agent in such a 
+way that the total cost of the assignment is minimized. Write a Scilab 
+program to solve this problem. 
+
+
+function jobSequencing(arr, n) 
+    jobassigned = zeros(1, n); 
+    assignment = zeros(1, n); 
+    for i = 1:n 
+        minimumCost = 1000;  
+            jobIndex = -1; 
+            for j = 1:n 
+                if (jobassigned(j) == 0 && arr(i, j) < minimumCost) 
+                    minimumCost = arr(i, j); 
+                    jobIndex = j; 
+                end 
+            end 
+            if jobIndex ~= -1 
+                assignment(i) = jobIndex; 
+                jobassigned(jobIndex) = 1; 
+            end 
+        end 
+        
+        total_min_cost = 0; 
+        for i = 1:n 
+            total_min_cost = total_min_cost + arr(i, assignment(i)); 
+        end 
+        
+        disp("Job sequencing is:") 
+        for i = 1:n 
+            if assignment(i) > 0 
+                disp("Worker " + string(i) + " is assigned to Job " + string(assignment(i))); 
+            else 
+                disp("Worker " + string(i) + " is not assigned to any job."); 
+            end 
+        end 
+        disp("Total minimum cost: " + string(total_min_cost)); 
+    endfunction 
+    n = input("Please enter number of workers/jobs: "); 
+    arr = zeros(n, n); 
+    for i = 1:n 
+        for j = 1:n arr(i, j) = input("Array Element at Index " + string(i) + " and " + string(j) + ": "); 
+        end 
+    end 
+    jobSequencing(arr, n);
+
+
+--------------------------------------------------------------------------------------------
+//Assignment 7
+
+1. Write a Scilab program to solve a problem of maze by applying an appropriate algorithm. Write 
+an algorithm for the same along with time complexity in the notebook. 
+
+
+2. Suppose we want to make an exam schedule for a university. We have listed different subjects 
+and students enrolled in every subject. Many subjects would have common students (of the same 
+batch, some backlog students, etc). How do we schedule the exam so that no two exams with a 
+common student are scheduled at same time? How many minimum time slots are needed to 
+schedule all exams? This problem can be represented as a graph where every vertex is a subject 
+and an edge between two vertices means there is a common student. So this is a graph coloring 
+problem where the minimum number of time slots is equal to the chromatic number of the graph. 
+Write a Scilab program to solve the above problem. 
+
+function subjectGraph = createSubjectGraph(students)
+    [nStudents, nSubjects] = size(students); 
+    subjectGraph = zeros(nSubjects, nSubjects);
+
+    for i = 1:nSubjects
+        for j = i+1:nSubjects           
+            for s = 1:nStudents
+                if students(s, i) == 1 & students(s, j) == 1 then
+                    subjectGraph(i, j) = 1; 
+                    subjectGraph(j, i) = 1; 
+                    break;
+                end
+            end
+        end
+    end
+endfunction
+
+function [chromaticNumber, schedule] = greedyGraphColoring(graph)
+    n = size(graph, 1); 
+
+    result = -1 * ones(n, 1); 
+    result(1) = 1;
+    available = ones(1, n); 
+    
+    for u = 2:n
+        for i = 1:n
+            if graph(u, i) == 1 & result(i) <> -1 then
+                available(result(i)) = 0; 
+            end
+        end
+        
+        for color = 1:n
+            if available(color) == 1 then
+                result(u) = color; 
+                break;
+            end
+        end
+        
+        available = ones(1, n);
+    end
+
+    chromaticNumber = max(result);
+    
+    schedule = list();
+    for i = 1:n
+        schedule($ + 1) = "Subject " + string(i) + " is scheduled in time slot " + string(result(i));
+    end
+endfunction
+
+// Define the student-subject enrollment matrix
+students = [
+  1 0 1 1;  // Student 1 is enrolled in Subject 1 and Subject 3
+  0 0 1 0;
+  1 0 1 1;
+  1 0 0 1  // Student 2 is enrolled in Subject 3
+];
+
+subjectGraph = createSubjectGraph(students);
+
+[minTimeSlots, examSchedule] = greedyGraphColoring(subjectGraph);
+
+disp("Minimum time slots needed: " + string(minTimeSlots));
+
+disp("Exam schedule:");
+for i = 1:length(examSchedule)
+    disp(examSchedule(i));
+end
+
+--------------------------------------------------------------------------------------------
+//Assignment 8
+
+ab Assignments  
+1. Given a set of cities and distance between every pair of cities, the problem is 
+to find the shortest possible tour that visits every city exactly once and returns 
+to the starting point. 
+
+
+function [min_distance, best_path] = tspBranchBound(cost_matrix)
+    n = size(cost_matrix, 1);  // Number of cities
+
+    visited = zeros(1, n); 
+    visited(1) = 1; // Start from the first city (city 0)
+
+    best_path = [];
+
+    [min_distance, best_path] = tsp_recursive(cost_matrix, visited, 1, 0, 1, n, [0]);
+endfunction
+
+function [distance, best_path] = tsp_recursive(cost_matrix, visited, current_city, current_distance, count, n, current_path)
+
+    if count == n then
+        final_distance = current_distance + cost_matrix(current_city, 1); 
+        current_path = [current_path, 0]; 
+        distance = final_distance;
+        best_path = current_path; // Store the best path found
+        return;
+    end
+    
+    min_distance = %inf; 
+    best_path = [];    
+    
+ 
+    for next_city = 2:n
+        if visited(next_city) == 0 then
+            visited(next_city) = 1; // Mark the city as visited
+
+            new_distance = current_distance + cost_matrix(current_city, next_city);
+            
+            [temp_distance, temp_path] = tsp_recursive(cost_matrix, visited, next_city, new_distance, count + 1, n, [current_path, next_city - 1]);
+            
+            
+            if temp_distance < min_distance then
+                min_distance = temp_distance;
+                best_path = temp_path; // Update best path if a new minimum distance is found
+            end
+            
+            visited(next_city) = 0; // Backtrack, mark the city as unvisited
+        end
+    end
+    
+    distance = min_distance; // Return the minimum distance for the current recursion level
+endfunction
+
+
+function path_str = join_path_with_arrow(path)
+    path_str = string(path(1));  // Start with the first city
+    for i = 2:length(path)
+        path_str = path_str + "->" + string(path(i));  // Append each city with "->"
+    end
+endfunction
+
+
+cost_matrix = [0 10 15 20; 10 0 35 25; 15 35 0 30; 20 25 30 0]; // Updated Distance matrix for 4 cities
+[min_distance, best_path] = tspBranchBound(cost_matrix);
+
+formatted_path = join_path_with_arrow(best_path);
+
+// Display the results
+disp("Shortest distance covering all cities is: " + string(min_distance));
+disp("Best path for the tour is: " + formatted_path);
+
+
+
+2. Generate a binary string of length N using branch and bound technique. 
+(Input: N = 3 Output: 000 001 010 011 100 101 110 111 Explanation: 
+Numbers with 3 
+binary digits are 0, 1, 2, 3, 4, 5, 6, 7 Input: N = 2 Output: 00 01 10 11)
+
+// Function to generate binary strings of length N
+function generateBinaryStrings(N)
+    // Initialize an empty string for the current combination
+    current_string = '';
+    // Call the recursive function to generate binary strings
+    generateBinaryRecursive(N, current_string);
+endfunction
+
+// Recursive function to build binary strings
+function generateBinaryRecursive(N, current_string)
+    // Base case: if the current string length is N, display it
+    if length(current_string) == N then
+        disp(current_string);
+        return;
+    end
+
+    // Recur for adding '0'
+    generateBinaryRecursive(N, current_string + '0');
+
+    // Recur for adding '1'
+    generateBinaryRecursive(N, current_string + '1');
+endfunction
+
+// Test the function with N = 3 and N = 2
+N1 = 3;
+disp("Binary strings of length " + string(N1) + ":");
+generateBinaryStrings(N1);
+
+N2 = 2;
+disp("Binary strings of length " + string(N2) + ":");
+generateBinaryStrings(N2);
+
+
+-------------------------------------------------------------------------------------------
